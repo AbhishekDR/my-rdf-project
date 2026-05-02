@@ -13,7 +13,7 @@ except Exception as e:
 
 # --- 2. SETUP THE LLM (The "Brain") ---
 # Use your actual key here
-client = genai.Client(api_key="AIzaSyBxKK12vx_sG-ZYaxAay0VQXwtVepJydEE")
+client = genai.Client(api_key="GOOGLE_API_KEY")
 
 SYSTEM_PROMPT = """
 You are a SPARQL expert for NDS map data.
