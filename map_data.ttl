@@ -1,0 +1,49 @@
+@prefix nds:  <http://nds.map/schema#> .
+@prefix road: <http://nds.map/data/road/> .
+@prefix lane: <http://nds.map/data/lane/> .
+@prefix feat: <http://nds.map/data/feature/> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+### ROAD DEFINITIONS ###
+
+road:R101 a nds:Road ;
+    nds:name "Outer Ring Road" ;
+    nds:roadClass "Highway" ;
+    nds:speedLimit 80 ;
+    nds:hasLane lane:L_A, lane:L_B ;
+    nds:connectsTo road:R102 .
+
+road:R102 a nds:Road ;
+    nds:name "Sarjapur Road" ;
+    nds:roadClass "Arterial" ;
+    nds:speedLimit 50 .
+
+road:R103 a nds:Road ;
+    nds:name "Airport Road" ;
+    nds:roadClass "Highway" ;
+    nds:speedLimit 100 ;
+    nds:connectsTo road:R101 .
+
+
+### LANE DEFINITIONS ###
+
+lane:L_A a nds:Lane ;
+    nds:laneNumber 1 ;
+    nds:laneType "Driving Lane" ;
+    nds:hasFeature feat:Hump1 .
+
+lane:L_B a nds:Lane ;
+    nds:laneNumber 2 ;
+    nds:laneType "Bus Lane" .
+
+
+### FEATURE DEFINITIONS ###
+
+feat:Hump1 a nds:TrafficFeature ;
+    nds:featureType "Speed Hump" ;
+    nds:height "10cm" ;
+    nds:material "Rubber" .
+
+feat:Sign1 a nds:TrafficSign ;
+    nds:type "Stop" ;
+    nds:locatedOn road:R102 .
