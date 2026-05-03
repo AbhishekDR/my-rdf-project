@@ -1,6 +1,7 @@
 from google import genai
 from rdflib import Graph
 import os
+from dotenv import load_dotenv
 
 # --- 1. SETUP THE DATA (The "Body") ---
 g = Graph()
@@ -11,9 +12,25 @@ try:
 except Exception as e:
     print(f"✗ Failed to load map data: {e}")
 
+# Get the key
+raw_key = os.getenv("GOOGLE_API_KEY")
+
+# --- BULLETPROOF CHECK ---
+if raw_key is None:
+    print("❌ CRITICAL: GOOGLE_API_KEY is None. load_dotenv() failed to find or read your .env file.")
+    # Attempt a direct path load if OneDrive is being weird
+    dotenv_path = os.path.join(os.getcwd(), '.env')
+    print(f"Searching for .env at: {dotenv_path}")
+elif not raw_key.startswith("AIza"):
+    print(f"❌ CRITICAL: Key was found but it doesn't start with 'AIza'. It starts with: '{raw_key[:5]}'")
+else:
+    print(f"✅ Key loaded successfully. Length: {len(raw_key)} characters.")
+
+# Force clean the key just in case of hidden characters
+api_key = raw_key.strip() if raw_key else None
 # --- 2. SETUP THE LLM (The "Brain") ---
 # Use your actual key here
-client = genai.Client(api_key="GOOGLE_API_KEY")
+client = genai.Client(api_key="AIzaSyBOb-wXgTglU-5A9vb1gbAupdRKHXxhlJs")
 
 SYSTEM_PROMPT = """
 You are a SPARQL expert for NDS map data.
@@ -28,7 +45,7 @@ Return ONLY the raw SPARQL code. No markdown.
 def ask_the_map(user_question):
     # Step A: Generate SPARQL
     response = client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-flash-latest",
         config={'system_instruction': SYSTEM_PROMPT},
         contents=user_question
     )
